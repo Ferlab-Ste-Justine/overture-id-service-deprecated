@@ -27,6 +27,6 @@ const loggers = {
 }
 
 module.exports = {
-    storeLogger: loggers[configs.storeLogger],
+    sourceLogger: loggers[configs.sourceLogger],
     httpLogger: loggers[configs.httpLogger]
 }

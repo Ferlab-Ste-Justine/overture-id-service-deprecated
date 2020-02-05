@@ -12,6 +12,7 @@
     "data.either": "^1.5.2",
     "express": "^4.17.1",
     "@cr-ste-justine/functional-utils": "^0.1.0",
+    "@hapi/joi": "^17.1.0",
     "ramda": "^0.26.1",
     "redis": "^2.8.0",
     "restify-errors": "^8.0.1",

@@ -2,25 +2,55 @@
 const R = require('ramda')
 const express = require('express')
 const Either = require('data.either')
+const Joi = require('@hapi/joi')
 
 //Internal dependencies
 const configs = require('./config')
 const logger = require('./logger')
+const idsSource = require('./sources')[configs.idsSource]
+
+const middleware = require('./middleware')
 
 //Routing
 
 const server = express()
 
-var dummy_increment = 0
+const nonEmptyString = Joi.string().min(1).required()
+
+const patientQuery = Joi.object({
+    'submittedProjectId': nonEmptyString,
+    'submittedPatientId': nonEmptyString
+})
+server.get('/patient/id',
+    middleware.check_query(patientQuery, logger.httpLogger),
+    middleware.getId(idsSource, 'get_patient')
+)
+
+const specimenQuery = Joi.object({
+    'submittedProjectId': nonEmptyString,
+    'submittedSpecimenId': nonEmptyString
+})
+server.get('/specimen/id',
+    middleware.check_query(specimenQuery, logger.httpLogger),
+    middleware.getId(idsSource, 'get_specimen')
+)
+
+const sampleQuery = Joi.object({
+    'submittedProjectId': nonEmptyString,
+    'submittedSampleId': nonEmptyString
+})
+server.get('/sample/id',
+    middleware.check_query(sampleQuery, logger.httpLogger),
+    middleware.getId(idsSource, 'get_sample')
+)
+
 server.use(function (req, res, next) {
     logger.httpLogger.info({
-        'request': {
-            'method': req.method,
-            'url': req.url
-        }
+        'event': 'unhandled_request',
+        'method': req.method,
+        'url': req.url
     })
-    res.status(200).send('id_' + dummy_increment)
-    dummy_increment += 1
+    res.status(404).send('Unknown Url')
 })
 
 const err_message = R.path(['body', 'message'])
@@ -33,8 +63,10 @@ server.use(function (err, req, res, next) {
             res.status(401).send(err_message(err))
         } else if(code == 'Forbidden') {
             res.status(403).send(err_message(err))
+        } else if (code == 'NotFound') {
+            res.status(404).send(err_message(err))
         } else {
-            return next(err)
+            res.status(500).send('Undefined Error')
         }
     } else {
         return next(err)

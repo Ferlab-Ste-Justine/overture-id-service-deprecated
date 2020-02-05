@@ -32,10 +32,8 @@ const load_mandatory_json_env_var = (key) => {
 }
 
 module.exports = {
-    storeUrl: load_mandatory_str_env_var('STORE_URL'),
-    storePassword: load_mandatory_str_env_var('STORE_PASSWORD'),
-    storeDatabase: load_mandatory_str_env_var('STORE_DATABASE'),
     servicePort: load_mandatory_str_env_var('SERVICE_PORT'),
-    storeLogger: load_optional_str_env_var('STORE_LOGGER', () => 'default'),
-    httpLogger: load_optional_str_env_var('HTTP_LOGGER', () => 'default')
+    sourceLogger: load_optional_str_env_var('SOURCE_LOGGER', () => 'default'),
+    httpLogger: load_optional_str_env_var('HTTP_LOGGER', () => 'default'),
+    idsSource: load_optional_str_env_var('IDS_SOURCE', () => 'dummy')
 }
