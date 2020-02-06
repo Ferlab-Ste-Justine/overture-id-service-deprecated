@@ -23,7 +23,7 @@ const patientQuery = Joi.object({
 })
 server.get('/patient/id',
     middleware.check_query(patientQuery, logger.httpLogger),
-    middleware.getId(idsSource, 'get_patient')
+    middleware.getId(idsSource, 'get_patient', logger.sourceLogger)
 )
 
 const specimenQuery = Joi.object({
@@ -32,7 +32,7 @@ const specimenQuery = Joi.object({
 })
 server.get('/specimen/id',
     middleware.check_query(specimenQuery, logger.httpLogger),
-    middleware.getId(idsSource, 'get_specimen')
+    middleware.getId(idsSource, 'get_specimen', logger.sourceLogger)
 )
 
 const sampleQuery = Joi.object({
@@ -41,7 +41,7 @@ const sampleQuery = Joi.object({
 })
 server.get('/sample/id',
     middleware.check_query(sampleQuery, logger.httpLogger),
-    middleware.getId(idsSource, 'get_sample')
+    middleware.getId(idsSource, 'get_sample', logger.sourceLogger)
 )
 
 server.use(function (req, res, next) {

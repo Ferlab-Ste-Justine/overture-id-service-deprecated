@@ -9,7 +9,7 @@ const check_query = R.curry((querySchema, logger) => (req, res, next) => {
             'url': req.url,
             'validation': 'passed'
         })
-        res.status(400).send(validation.error)
+        next()
     } else {
         logger.info({
             'event': 'incoming_request',
@@ -18,7 +18,7 @@ const check_query = R.curry((querySchema, logger) => (req, res, next) => {
             'validation': 'failed',
             'error': validation.error
         })
-        next()
+        res.status(400).send(validation.error)
     }
 })
 
@@ -29,6 +29,8 @@ const getId = R.curry((source, sourceType, logger) => (req, res, next) => {
                 'event': 'id_mapping_success',
                 'method': req.method,
                 'url': req.url,
+                'source': source.label,
+                'type': sourceType,
                 'result': result.value
             })
             res.status(200).send(result.value)
@@ -37,6 +39,8 @@ const getId = R.curry((source, sourceType, logger) => (req, res, next) => {
                 'event': 'id_mapping_failure',
                 'method': req.method,
                 'url': req.url,
+                'source': source.label,
+                'type': sourceType,
                 'error': result.value
             })
             next(result.value)

@@ -4,7 +4,7 @@ const Either = require('data.either')
 const errors = require('restify-errors')
 
 const get_patient = R.compose(
-    Promise.resolve,
+    (result) => Promise.resolve(result),
     R.ifElse(
         R.startsWith('DO'),
         R.compose(
@@ -17,7 +17,7 @@ const get_patient = R.compose(
 )
 
 const get_specimen = R.compose(
-    Promise.resolve,
+    (result) => Promise.resolve(result),
     R.ifElse(
         R.startsWith('SP'),
         R.compose(
@@ -30,7 +30,7 @@ const get_specimen = R.compose(
 )
 
 const get_sample = R.compose(
-    Promise.resolve,
+    (result) => Promise.resolve(result),
     R.ifElse(
         R.startsWith('SA'),
         R.compose(
@@ -42,8 +42,11 @@ const get_sample = R.compose(
     R.prop('submittedSampleId')
 )
 
+const label = 'dummy'
+
 module.exports = {
     get_patient,
     get_specimen,
-    get_sample
+    get_sample,
+    label
 }
