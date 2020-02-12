@@ -22,7 +22,7 @@ const check_query = R.curry((querySchema, logger) => (req, res, next) => {
     }
 })
 
-const getId = R.curry((source, sourceType, logger) => (req, res, next) => {
+const get_id = R.curry((source, sourceType, logger) => (req, res, next) => {
     source[sourceType](req.query).then((result) => {
         if(result.isRight) {
             logger.debug({
@@ -50,5 +50,5 @@ const getId = R.curry((source, sourceType, logger) => (req, res, next) => {
 
 module.exports = {
     check_query,
-    getId
+    get_id
 }

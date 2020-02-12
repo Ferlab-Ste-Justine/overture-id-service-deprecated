@@ -42,11 +42,14 @@ const get_sample = R.compose(
     R.prop('submittedSampleId')
 )
 
+const is_healthy = () => Promise.resolve(true);
+
 const label = 'dummy'
 
 module.exports = {
     get_patient,
     get_specimen,
     get_sample,
+    is_healthy,
     label
 }

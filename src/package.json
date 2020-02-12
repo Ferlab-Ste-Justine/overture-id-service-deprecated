@@ -10,6 +10,7 @@
   "dependencies": {
     "@cr-ste-justine/configs": "^0.1.0",
     "data.either": "^1.5.2",
+    "@elastic/elasticsearch": "^7.5.1",
     "express": "^4.17.1",
     "@cr-ste-justine/functional-utils": "^0.1.0",
     "@hapi/joi": "^17.1.0",

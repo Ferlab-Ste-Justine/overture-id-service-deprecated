@@ -1,3 +1,4 @@
 module.exports = {
-    'dummy': require('./dummy')
+    'dummy': require('./dummy'),
+    'clin_elastisearch': require('clin_elastisearch')
 }
