@@ -70,8 +70,10 @@ const patient_submitter_id_components = R.ifElse(
     R.compose(
         R.converge(
             R.merge,
-            R.compose(R.assoc('orgAlias', R.__, {}), R.prop(0)),
-            R.compose(R.assoc('mr', R.__, {}), R.prop(1)),
+            [
+                R.compose(R.assoc('orgAlias', R.__, {}), R.prop(0)),
+                R.compose(R.assoc('mr', R.__, {}), R.prop(1))
+            ]
         ),
         R.split('_')
     ),
