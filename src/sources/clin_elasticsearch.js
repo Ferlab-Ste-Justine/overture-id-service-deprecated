@@ -18,17 +18,23 @@ const get_patient = async (params) => {
     const submitterIdComponents = eUtils.patient_submitter_id_components(submitterId)
     const search = eUtils.generate_patient_search({
         "bool": {
-            "should": [
+            "must": [
+                { "match": { "studies.id":  params['submittedProjectId'] }},
                 {
-                  "bool": {
-                    "must": [
-                      { "match": { "identifier.MR": submitterIdComponents['mr'] }},
-                      { "match": { "organization.alias": submitterIdComponents['orgAlias'] }}
-                      
-                    ]
-                  }
-                },
-                { "match": { "identifier.JHN": submitterId }}
+                    "bool": {
+                        "should": [
+                            {
+                                "bool": {
+                                    "must": [
+                                        { "match": { "identifier.MR": submitterIdComponents['mr'] }},
+                                        { "match": { "organization.alias": submitterIdComponents['orgAlias'] }}
+                                    ]
+                                }
+                            },
+                            { "match": { "identifier.JHN": submitterId }}
+                        ]
+                    }
+                }
             ]
         }
     })
