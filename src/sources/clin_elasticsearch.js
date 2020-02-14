@@ -42,7 +42,6 @@ const get_patient = async (params) => {
         const { body } = await client.search(search)
         return R.compose(
             (result) => Promise.resolve(result),
-            Either.Right,
             eUtils.get_from_first_result(
                 eUtils.resultAccesors.patientSystemId
             )
@@ -66,7 +65,6 @@ const get_specimen = async (params) => {
         const { body } = await client.search(search)
         return R.compose(
             (result) => Promise.resolve(result),
-            Either.Right,
             eUtils.get_from_first_result(
                 R.compose(
                     eUtils.specimenAccessors.systemId,
@@ -93,7 +91,6 @@ const get_sample  = async (params) => {
         const { body } = await client.search(search)
         return R.compose(
             (result) => Promise.resolve(result),
-            Either.Right,
             eUtils.get_from_first_result(
                 R.compose(
                     eUtils.specimenAccessors.systemId,
@@ -110,6 +107,7 @@ const get_sample  = async (params) => {
     }
 }
 
+//http://localhost:9200/_cluster/health?pretty
 const is_healthy = async () => Promise.resolve(true);
 
 const label = 'clin-elastisearch'

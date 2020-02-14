@@ -8,8 +8,8 @@ const errors = require('restify-errors')
 const responseAccessors = {
     resultsCount: R.path(['hits', 'total']),
     hasResults: R.compose(R.gt(R.__, 0), R.path(['hits', 'total'])),
-    results: R.path(['hits', 'hits']),
-    firstResult: R.path(['hits', 'hits', 0])
+    results: R.compose(R.map(R.prop('_source')), R.path(['hits', 'hits'])),
+    firstResult: R.path(['hits', 'hits', 0, '_source'])
 }
 
 const _patientSubmitterId = R.ifElse(
@@ -29,15 +29,14 @@ const resultAccesors = {
         R.prop(0),
         R.filter(
             R.compose(
-                R.gt(R.__, 0),
-                R.length,
-                R.equals(submitterId), 
+                R.equals(submitterId),
+                R.prop(0),
                 R.prop('container')
             )
         ),
-        R.lensProp('specimens')
+        R.prop('specimens')
     ),
-    patientSystemId: R.prop('_id'),
+    patientSystemId: R.prop('id'),
     patientSubmitterId: _patientSubmitterId
 }
 
@@ -48,7 +47,7 @@ const specimenAccessors = {
 
 const get_from_first_result = (getter) => {
     return R.ifElse(
-        responseAccessors .hasResults,
+        responseAccessors.hasResults,
         R.compose(
             Either.Right,
             getter,
@@ -77,13 +76,14 @@ const patient_submitter_id_components = R.ifElse(
         ),
         R.split('_')
     ),
-    () => {return {'mr': null, 'orgAlias': null}}        
+    () => {return {'mr': "", 'orgAlias': ""}}        
 )
 
+
 /*
-    (val, key, obj) => { match: { key: val }}
+    (val) => { match: val }
 */
-const match = (val, key, obj) => R.assocPath(["match", key], val, {})
+const matchify = (val) => { return {'match': val} }
 
 /*
     (keyVals) => {
@@ -98,7 +98,11 @@ const match = (val, key, obj) => R.assocPath(["match", key], val, {})
 */
 const generate_and_query = R.compose(
     R.assocPath(["bool", "must"], R.__, {}),
-    R.mapObjIndexed(match)
+    R.compose(
+        R.map(matchify),
+        R.map(R.apply(R.objOf)),
+        R.toPairs
+    )
 )
 
 /*
