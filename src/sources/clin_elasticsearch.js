@@ -85,7 +85,7 @@ const get_sample  = async (params) => {
     const submitterId = params['submittedSampleId']
     const search = eUtils.generate_patient_and_search({
         "studies.id":  params['submittedProjectId'],
-        "specimens.container":  submitterId
+        "samples.container":  submitterId
     })
     try {
         const { body } = await client.search(search)
