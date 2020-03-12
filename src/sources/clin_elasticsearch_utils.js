@@ -12,17 +12,25 @@ const responseAccessors = {
     firstResult: R.path(['hits', 'hits', 0, '_source'])
 }
 
+const containerMatchingID = (submitterId) => R.compose(
+    R.prop(0),
+    R.filter(
+        R.compose(
+            R.equals(submitterId),
+            R.prop(0),
+            R.prop('container')
+        )
+    )
+)
+
 const resultAccesors = {
     specimenWithSubmitterId: (submitterId) => R.compose(
-        R.prop(0),
-        R.filter(
-            R.compose(
-                R.equals(submitterId),
-                R.prop(0),
-                R.prop('container')
-            )
-        ),
+        containerMatchingID(submitterId),
         R.prop('specimens')
+    ),
+    sampleWithSubmitterId: (submitterId) => R.compose(
+        containerMatchingID(submitterId),
+        R.prop('samples')
     ),
     patientSystemId: R.prop('id'),
     patientSubmitterId: R.prop('id')

@@ -79,7 +79,7 @@ const get_sample  = async (params) => {
             eUtils.get_from_first_result(
                 R.compose(
                     eUtils.specimenAccessors.systemId,
-                    eUtils.resultAccesors.specimenWithSubmitterId(submitterId)
+                    eUtils.resultAccesors.sampleWithSubmitterId(submitterId)
                 )
             )
         )(body)
