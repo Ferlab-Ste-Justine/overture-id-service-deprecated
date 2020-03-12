@@ -12,18 +12,6 @@ const responseAccessors = {
     firstResult: R.path(['hits', 'hits', 0, '_source'])
 }
 
-const _patientSubmitterId = R.ifElse(
-    R.compose(R.isNil, R.path(['identifier', 'JHN'])),
-    R.converge(
-        R.concat,
-        [
-            R.compose(R.concat(R.__, '_'), R.path(['organization', 'alias'])), 
-            R.path(['identifier', 'MR'])
-        ]
-    ),
-    R.path(['identifier', 'JHN'])
-)
-
 const resultAccesors = {
     specimenWithSubmitterId: (submitterId) => R.compose(
         R.prop(0),
@@ -37,7 +25,7 @@ const resultAccesors = {
         R.prop('specimens')
     ),
     patientSystemId: R.prop('id'),
-    patientSubmitterId: _patientSubmitterId
+    patientSubmitterId: R.prop('id')
 }
 
 const specimenAccessors = {
@@ -63,21 +51,6 @@ const search = {
     index: R.lensProp('index'),
     query: R.lensPath(['body', 'query'])
 }
-
-const patient_submitter_id_components = R.ifElse(
-    R.compose(R.gte(R.__, 2), R.length, R.split('_')),
-    R.compose(
-        R.converge(
-            R.merge,
-            [
-                R.compose(R.assoc('orgAlias', R.__, {}), R.prop(0)),
-                R.compose(R.assoc('mr', R.__, {}), R.prop(1))
-            ]
-        ),
-        R.split('_')
-    ),
-    () => {return {'mr': "", 'orgAlias': ""}}        
-)
 
 
 /*
@@ -135,7 +108,6 @@ module.exports = {
     responseAccessors,
     resultAccesors,
     specimenAccessors,
-    patient_submitter_id_components,
     generate_patient_search,
     generate_patient_and_search,
     get_from_first_result

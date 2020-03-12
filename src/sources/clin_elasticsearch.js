@@ -15,26 +15,11 @@ const client = new Client({ node: load_mandatory_str_env_var('ELASTISEARCH_URL')
 
 const get_patient = async (params) => {
     const submitterId = params['submittedPatientId']
-    const submitterIdComponents = eUtils.patient_submitter_id_components(submitterId)
     const search = eUtils.generate_patient_search({
         "bool": {
             "must": [
                 { "match": { "studies.id":  params['submittedProjectId'] }},
-                {
-                    "bool": {
-                        "should": [
-                            {
-                                "bool": {
-                                    "must": [
-                                        { "match": { "identifier.MR": submitterIdComponents['mr'] }},
-                                        { "match": { "organization.alias": submitterIdComponents['orgAlias'] }}
-                                    ]
-                                }
-                            },
-                            { "match": { "identifier.JHN": submitterId }}
-                        ]
-                    }
-                }
+                { "match": { "id":  submitterId }}
             ]
         }
     })
