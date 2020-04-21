@@ -48,7 +48,28 @@ const get_id = R.curry((source, sourceType, logger) => (req, res, next) => {
     })
 })
 
+const health_check = R.curry((source, logger) => {
+    return (req, res, next) => {
+        source.is_healthy().then((isHealthy) => {
+            if(isHealthy) {
+                logger.info('Health check succeeded')
+                res.status(200)
+                res.send('ok')
+            } else {
+                logger.warn('Health check failed')
+                res.status(500)
+                res.send('not ok')
+            }
+        }).catch((err) => {
+            logger.warn('Health check failed')
+            res.status(500)
+            res.send('not ok')
+        })
+    }
+})
+
 module.exports = {
     check_query,
-    get_id
+    get_id,
+    health_check
 }

@@ -17,6 +17,10 @@ const server = express()
 
 const nonEmptyString = Joi.string().min(1).required()
 
+server.get('/health',
+    middleware.health_check(idsSource, logger.livelinessLogger)
+)
+
 const patientQuery = Joi.object({
     'submittedProjectId': nonEmptyString,
     'submittedPatientId': nonEmptyString

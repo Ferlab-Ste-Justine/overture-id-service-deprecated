@@ -28,5 +28,6 @@ const loggers = {
 
 module.exports = {
     sourceLogger: loggers[configs.sourceLogger],
-    httpLogger: loggers[configs.httpLogger]
+    httpLogger: loggers[configs.httpLogger],
+    livelinessLogger: loggers[configs.livelinessLogger]
 }

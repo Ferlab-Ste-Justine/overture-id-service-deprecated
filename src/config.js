@@ -8,5 +8,6 @@ module.exports = {
     servicePort: load_mandatory_str_env_var('SERVICE_PORT'),
     sourceLogger: load_optional_str_env_var('SOURCE_LOGGER', () => 'default'),
     httpLogger: load_optional_str_env_var('HTTP_LOGGER', () => 'default'),
+    livelinessLogger: load_optional_str_env_var('LIVELINESS_LOGGER', () => 'default'),
     idsSource: load_optional_str_env_var('IDS_SOURCE', () => 'dummy')
 }

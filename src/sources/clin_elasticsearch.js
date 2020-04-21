@@ -92,8 +92,9 @@ const get_sample  = async (params) => {
     }
 }
 
-//http://localhost:9200/_cluster/health?pretty
-const is_healthy = async () => Promise.resolve(true);
+const is_healthy = async () => {
+    return client.cat.health({'format': 'json'})
+}
 
 const label = 'clin-elastisearch'
 
