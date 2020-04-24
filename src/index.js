@@ -63,12 +63,16 @@ const err_has_code = R.compose(R.not, R.isNil, err_code)
 server.use(function (err, req, res, next) {
     if (err_has_code(err)) {
         const code = err_code(err)
-        if(code == 'Unauthorized') {
+        if(code == 'BadRequest') {
+            res.status(400).send(err_message(err))
+        } else if(code == 'Unauthorized') {
             res.status(401).send(err_message(err))
         } else if(code == 'Forbidden') {
             res.status(403).send(err_message(err))
         } else if (code == 'NotFound') {
             res.status(404).send(err_message(err))
+        } else if (code == 'InternalServer') {
+            res.status(500).send(err_message(err))
         } else if (code == 'ServiceUnavailable') {
             res.status(503).send(err_message(err))
         } else {
@@ -77,7 +81,6 @@ server.use(function (err, req, res, next) {
     } else {
         return next(err)
     }
-    
 })
 
 //Server launch
